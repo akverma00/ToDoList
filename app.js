@@ -42,7 +42,6 @@ app.get('/', expressAsyncHandler(async (req, res) => {
 }));
 
 app.post('/', expressAsyncHandler(async (req, res) => {
-  console.log(JSON.stringify(req.body));
   fetch("http://localhost:3000/api/", {
     method: "post",
     body: JSON.stringify(req.body),
@@ -58,6 +57,41 @@ app.post('/', expressAsyncHandler(async (req, res) => {
     });
 
 }));
+
+
+app.post('/toggle', expressAsyncHandler(async (req, res) => {
+
+  fetch(`http://localhost:3000/api/${req.body.id}/${req.body.completed}`, {
+    method: "put",
+    headers: { "Content-Type": "application/json" }
+  })
+    .then(res => res.json())
+    .then(data => {
+      res.redirect('/');
+    })
+    .catch(err => {
+      console.log(err);
+      res.render("error_page", { error: err });
+    });
+
+}));
+app.get('/delete/:id', expressAsyncHandler(async (req, res) => {
+
+  fetch(`http://localhost:3000/api/${req.params.id}`, {
+    method: "delete",
+    headers: { "Content-Type": "application/json" }
+  })
+    .then(res => res.json())
+    .then(data => {
+      res.redirect('/');
+    })
+    .catch(err => {
+      console.log(err);
+      res.render("error_page", { error: err });
+    });
+
+}));
+
 
 
 

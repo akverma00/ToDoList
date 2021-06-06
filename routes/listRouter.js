@@ -10,7 +10,7 @@ listRouter.post("/", listControllers.createItem);
 listRouter.get("/", listControllers.findAll);
 
 // Update a listitem with id
-listRouter.put("/:id", listControllers.updateItem);
+listRouter.put("/:id/:completed", listControllers.updateItem);
 
 // Delete a listRouter with id
 listRouter.delete("/:id", listControllers.removeItem);

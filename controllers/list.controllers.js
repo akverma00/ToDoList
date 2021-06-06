@@ -47,8 +47,51 @@ const findAll = (req, res) => {
             });
         });
 };
-const updateItem = (req, res) => { };
-const removeItem = (req, res) => { };
+const updateItem = (req, res) => {
+    const id = req.params.id;
+    Listitem.update({ completed: req.params.completed === "false" ? true : false }, {
+        where: { id: id }
+    })
+        .then(num => {
+            if (num == 1) {
+                res.send({
+                    message: "Listitem was updated successfully."
+                });
+            } else {
+                res.send({
+                    message: `Cannot update Listitem with id=${id}. Maybe Listitem was not found or req.body is empty!`
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Error updating Listitem with id=" + id
+            });
+        });
+};
+const removeItem = (req, res) => {
+    const id = req.params.id;
+
+    Listitem.destroy({
+        where: { id: id }
+    })
+        .then(num => {
+            if (num == 1) {
+                res.send({
+                    message: "Listitem was deleted successfully!"
+                });
+            } else {
+                res.send({
+                    message: `Cannot delete Listitem with id=${id}. Maybe Listitem was not found!`
+                });
+            }
+        })
+        .catch(err => {
+            res.status(500).send({
+                message: "Could not delete Listitem with id=" + id
+            });
+        });
+};
 const listControllers = {
     createItem,
     findAll,
