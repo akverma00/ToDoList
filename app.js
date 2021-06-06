@@ -4,7 +4,6 @@ import express from 'express';
 import listRouter from './routes/listRouter.js';
 //Database connect
 import db from "./models/index.js";
-import expressAsyncHandler from 'express-async-handler';
 import fetch from 'node-fetch';
 
 config();
@@ -20,12 +19,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-
-
-
 app.use('/api', listRouter);
 
-app.get('/', expressAsyncHandler(async (req, res) => {
+app.get('/', ((req, res) => {
   fetch("http://localhost:3000/api/", {
     method: "get",
     headers: { "Content-Type": "application/json" }
@@ -41,7 +37,7 @@ app.get('/', expressAsyncHandler(async (req, res) => {
 
 }));
 
-app.post('/', expressAsyncHandler(async (req, res) => {
+app.post('/', ((req, res) => {
   fetch("http://localhost:3000/api/", {
     method: "post",
     body: JSON.stringify(req.body),
@@ -59,7 +55,7 @@ app.post('/', expressAsyncHandler(async (req, res) => {
 }));
 
 
-app.post('/toggle', expressAsyncHandler(async (req, res) => {
+app.post('/toggle', ((req, res) => {
 
   fetch(`http://localhost:3000/api/${req.body.id}/${req.body.completed}`, {
     method: "put",
@@ -75,7 +71,7 @@ app.post('/toggle', expressAsyncHandler(async (req, res) => {
     });
 
 }));
-app.get('/delete/:id', expressAsyncHandler(async (req, res) => {
+app.get('/delete/:id', ((req, res) => {
 
   fetch(`http://localhost:3000/api/${req.params.id}`, {
     method: "delete",

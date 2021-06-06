@@ -36,7 +36,13 @@ const findAll = (req, res) => {
     const title = req.query.title;
     var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
 
-    Listitem.findAll({ where: condition })
+    Listitem.findAll({
+        where: condition,
+        order: [
+            ['completed', 'ASC'],
+            ['createdAt', 'ASC']
+        ]
+    })
         .then(data => {
             res.send(data);
         })

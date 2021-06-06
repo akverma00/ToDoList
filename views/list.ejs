@@ -10,22 +10,30 @@
 
     <% newListItems.forEach(function(item){ %>
       <div class="item">
+        <a href="/delete/<%=item.id%>" class="w3-btn w3-orange w3-large button red">Delete<i
+            class="w3-margin-left fa fa-trash"></i></a>
 
-        <form action="/toggle" method="post">
-          <input value="<%=item.completed%>" name="completed" hidden />
-          <input type="checkbox" value="<%=item.id%>" name="id" onchange="this.form.submit()">
+        <form id="<%=item.id%>" action="/toggle" method="post">
+          <input value="<%=item.completed%>" name="completed" hidden>
+          <input value="<%=item.id%>" name="id" hidden>
+          <input type="submit" class="w3-btn w3-grey w3-large button red" value="
+          <% if( item.completed){ %>
+            Completed
+            <% } else { %>
+              Not Completed
+              <% } %>">
+          </input>
         </form>
-        <a href="/delete/<%=item.id%>" class="button red"><i class="fa fa-trash"></i></a>
         <p>
           <%= item.title %>
         </p>
-
       </div>
+
 
       <% }) %>
 
-        <form class="item" action="/" method="post">
-          <input type="text" name="title" placeholder="New Item" autocomplete="off">
+        <form class=" item" action="/" method="post">
+          <input type="text" name="title" placeholder="Add New Item" autocomplete="on">
           <button type="submit" name="list">+</button>
         </form>
   </div>
