@@ -1,12 +1,9 @@
-import axios from 'axios';
-import { config } from 'dotenv';
-import express from 'express';
-import listRouter from './routes/listRouter.js';
-//Database connect
-import db from "./models/index.js";
-import fetch from 'node-fetch';
+const dotenv = require('dotenv');
+const express = require('express');
+const listRouter = require('./server/routes');
+const fetch = require('node-fetch');
 
-config();
+dotenv.config();
 
 const app = express();
 
