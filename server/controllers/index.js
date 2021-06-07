@@ -2,9 +2,9 @@ const { ListItem } = require('../models');
 const createItem = async (req, res) => {
     try {
         const item = await ListItem.create(req.body);
-        return res.status(201).json({
-            item,
-        });
+        return res.status(201).json(
+            item
+        );
     } catch (error) {
         return res.status(500).json({ message: error.message })
     }
@@ -14,7 +14,7 @@ const findAll = async (req, res) => {
 
     try {
         const title = req.query.title;
-        var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
+        //var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
         const item = await ListItem.findAll({
             //where: condition,
             order: [
@@ -22,9 +22,9 @@ const findAll = async (req, res) => {
                 ['createdAt', 'ASC']
             ]
         });
-        return res.status(201).json({
+        return res.status(201).json(
             item,
-        });
+        );
     } catch (error) {
         return res.status(500).json({ error: error.message || "Some error occurred while retrieving tutorials." })
     }

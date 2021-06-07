@@ -2,12 +2,27 @@ const dotenv = require('dotenv');
 const express = require('express');
 const listRouter = require('./server/routes');
 const fetch = require('node-fetch');
+const redis = require('redis');
 
 dotenv.config();
 
 const app = express();
 
 app.set('view engine', 'ejs');
+//redis
+const client = redis.createClient(process.env.REDIS_PORT || 6379);
+// Cache middleware for specified todo item id
+const cached_data = (req, res, next) => {
+  client.get('list1', (err, data) => {
+    if (err) throw err;
+    if (data !== null) {
+
+      console.log("data from redis");
+      res.render("list", { listTitle: "Today", newListItems: JSON.parse(data) });
+    }
+    else next();
+  })
+}
 //middleware
 
 
@@ -18,14 +33,18 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/api', listRouter);
 
-app.get('/', ((req, res) => {
+
+app.get('/', cached_data, ((req, res) => {
   fetch("http://localhost:3000/api/", {
     method: "get",
     headers: { "Content-Type": "application/json" }
   })
     .then(res => res.json())
     .then(data => {
-      res.render("list", { listTitle: "Today", newListItems: data.item });
+      console.log("data from database");
+
+      client.setex('list1', 50, JSON.stringify(data));
+      res.render("list", { listTitle: "Today", newListItems: data });
     })
     .catch(err => {
       console.log(err);
@@ -42,6 +61,8 @@ app.post('/', ((req, res) => {
   })
     .then(res => res.json())
     .then(data => {
+
+      client.del('list1');
       res.redirect('/');
     })
     .catch(err => {
@@ -60,6 +81,7 @@ app.post('/toggle', ((req, res) => {
   })
     .then(res => res.json())
     .then(data => {
+      client.del('list1');
       res.redirect('/');
     })
     .catch(err => {
@@ -76,6 +98,8 @@ app.get('/delete/:id', ((req, res) => {
   })
     .then(res => res.json())
     .then(data => {
+
+      client.del('list1');
       res.redirect('/');
     })
     .catch(err => {
