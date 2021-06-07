@@ -25,7 +25,7 @@ app.get('/', ((req, res) => {
   })
     .then(res => res.json())
     .then(data => {
-      res.render("list", { listTitle: "Today", newListItems: data });
+      res.render("list", { listTitle: "Today", newListItems: data.item });
     })
     .catch(err => {
       console.log(err);
