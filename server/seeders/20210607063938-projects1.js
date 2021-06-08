@@ -30,7 +30,25 @@ module.exports = {
       updatedAt: new Date()
     },
     {
-      title: 'Project 4',
+      title: 'Project 744',
+      completed: true,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      title: 'Project 498',
+      completed: true,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      title: 'Project 488',
+      completed: true,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      title: 'Project 42',
       completed: true,
       createdAt: new Date(),
       updatedAt: new Date()
