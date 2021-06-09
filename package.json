@@ -8,11 +8,9 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "axios": "^0.21.1",
     "dotenv": "^10.0.0",
     "ejs": "~2.6.1",
     "express": "~4.16.1",
-    "express-async-handler": "^1.1.4",
     "node-fetch": "^2.6.1",
     "pg": "^8.6.0",
     "pg-hstore": "^2.3.3",
