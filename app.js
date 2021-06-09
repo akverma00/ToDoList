@@ -3,6 +3,7 @@ const express = require('express');
 const listRouter = require('./server/routes');
 const fetch = require('node-fetch');
 const redis = require('redis');
+const path = require('path');
 
 dotenv.config();
 
@@ -26,7 +27,8 @@ const cached_data = (req, res, next) => {
 //middleware
 
 
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, 'public')));
+app.set('views', path.join(__dirname, 'views'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
