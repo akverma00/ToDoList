@@ -2,8 +2,10 @@
   "name": "ToDoSequelize",
   "version": "0.0.0",
   "private": true,
+  "main": "main.js",
   "scripts": {
     "start:dev": "nodemon app.js",
+    "start:e": "electron .",
     "start": "node app.js"
   },
   "dependencies": {
@@ -18,6 +20,7 @@
     "sequelize": "^5.0.0"
   },
   "devDependencies": {
+    "electron": "^13.1.1",
     "eslint": "^7.28.0",
     "nodemon": "^2.0.7",
     "sequelize-cli": "^6.2.0"
