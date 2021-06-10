@@ -33,8 +33,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
+//
+const { publishToQueue } = require('./services/MQService');
 app.use('/api', listRouter);
-
 
 app.get('/', cached_data, ((req, res) => {
   fetch("http://localhost:3000/api/", {
@@ -55,7 +56,11 @@ app.get('/', cached_data, ((req, res) => {
 
 }));
 
-app.post('/', ((req, res) => {
+app.post('/', (async (req, res) => {
+  await publishToQueue({
+    queueName: 'testing_1',
+    payload: req.body
+  });
   fetch("http://localhost:3000/api/", {
     method: "post",
     body: JSON.stringify(req.body),
