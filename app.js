@@ -33,8 +33,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-//
+//RabbitMQ
 const { publishToQueue } = require('./services/MQService');
+require('./worker-1.js');
 app.use('/api', listRouter);
 
 app.get('/', cached_data, ((req, res) => {
@@ -46,7 +47,7 @@ app.get('/', cached_data, ((req, res) => {
     .then(data => {
       console.log("data from database");
 
-      client.setex('list1', 50, JSON.stringify(data));
+      //client.setex('list1', 50, JSON.stringify(data));
       res.render("list", { listTitle: "Today", newListItems: data });
     })
     .catch(err => {
@@ -60,66 +61,49 @@ app.post('/', (async (req, res) => {
   await publishToQueue({
     queueName: 'testing_1',
     payload: {
-      body: req.body,
       url: 'http://localhost:3000/api/',
+      body: { ...req.body },
       method: "post",
+      headers: { "Content-Type": "application/json" }
+
+    }
+  });
+
+  client.del('list1');
+  res.redirect('/');
+}));
+
+
+app.post('/toggle', (async (req, res) => {
+
+
+  await publishToQueue({
+    queueName: 'testing_1',
+    payload: {
+      url: `http://localhost:3000/api/${req.body.id}/${req.body.completed}`,
+      method: "put",
+      headers: { "Content-Type": "application/json" }
+
+    }
+  });
+
+
+  client.del('list1');
+  res.redirect('/');
+}));
+app.get('/delete/:id', (async (req, res) => {
+
+  await publishToQueue({
+    queueName: 'testing_1',
+    payload: {
+      url: `http://localhost:3000/api/${req.params.id}`,
+      method: "delete",
       headers: { "Content-Type": "application/json" }
     }
   });
 
-  fetch("http://localhost:3000/api/", {
-    method: "post",
-    body: JSON.stringify(req.body),
-    headers: { "Content-Type": "application/json" }
-  })
-    .then(res => res.json())
-    .then(data => {
-
-      client.del('list1');
-      res.redirect('/');
-    })
-    .catch(err => {
-      console.log(err);
-      res.render("error_page", { error: err });
-    });
-
-}));
-
-
-app.post('/toggle', ((req, res) => {
-
-  fetch(`http://localhost:3000/api/${req.body.id}/${req.body.completed}`, {
-    method: "put",
-    headers: { "Content-Type": "application/json" }
-  })
-    .then(res => res.json())
-    .then(data => {
-      client.del('list1');
-      res.redirect('/');
-    })
-    .catch(err => {
-      console.log(err);
-      res.render("error_page", { error: err });
-    });
-
-}));
-app.get('/delete/:id', ((req, res) => {
-
-  fetch(`http://localhost:3000/api/${req.params.id}`, {
-    method: "delete",
-    headers: { "Content-Type": "application/json" }
-  })
-    .then(res => res.json())
-    .then(data => {
-
-      client.del('list1');
-      res.redirect('/');
-    })
-    .catch(err => {
-      console.log(err);
-      res.render("error_page", { error: err });
-    });
-
+  client.del('list1');
+  res.redirect('/');
 }));
 
 

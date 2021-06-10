@@ -1,6 +1,8 @@
 const { ListItem } = require('../models');
 const createItem = async (req, res) => {
     try {
+        console.log(req);
+        console.log("aPI cONTENT bODY:---", req);
         const item = await ListItem.create(req.body);
         return res.status(201).json(
             item
