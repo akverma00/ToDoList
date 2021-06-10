@@ -59,8 +59,14 @@ app.get('/', cached_data, ((req, res) => {
 app.post('/', (async (req, res) => {
   await publishToQueue({
     queueName: 'testing_1',
-    payload: req.body
+    payload: {
+      body: req.body,
+      url: 'http://localhost:3000/api/',
+      method: "post",
+      headers: { "Content-Type": "application/json" }
+    }
   });
+
   fetch("http://localhost:3000/api/", {
     method: "post",
     body: JSON.stringify(req.body),
