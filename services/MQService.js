@@ -1,6 +1,12 @@
 const amqp = require('amqplib/callback_api.js');
 const CONN_URL = process.env.AMQP_URI;
 
+
+//error function
+const bail = (err) => {
+    console.error(err);
+    process.exit(1);
+}
 // create a connection
 var ch = null;
 amqp.connect(
