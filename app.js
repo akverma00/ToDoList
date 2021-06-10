@@ -35,13 +35,18 @@ app.use(express.urlencoded({ extended: true }));
 
 //RabbitMQ
 const { publishToQueue } = require('./services/MQService');
-require('./worker-1.js');
+//require('./worker-1.js');
+
+
+
+
+
 app.use('/api', listRouter);
 
 app.get('/', cached_data, ((req, res) => {
   fetch("http://localhost:3000/api/", {
     method: "get",
-    headers: { "Content-Type": "application/json" }
+    //headers: { "Content-Type": "application/json" }
   })
     .then(res => res.json())
     .then(data => {
@@ -61,10 +66,10 @@ app.post('/', (async (req, res) => {
   await publishToQueue({
     queueName: 'testing_1',
     payload: {
-      url: 'http://localhost:3000/api/',
-      body: { ...req.body },
+      url: `http://localhost:3000/api/${encodeURIComponent(req.body.title)}`,
+      //body: { ...req.body },
       method: "post",
-      headers: { "Content-Type": "application/json" }
+      //headers: { "Content-Type": "application/json" }
 
     }
   });
@@ -82,7 +87,7 @@ app.post('/toggle', (async (req, res) => {
     payload: {
       url: `http://localhost:3000/api/${req.body.id}/${req.body.completed}`,
       method: "put",
-      headers: { "Content-Type": "application/json" }
+      //headers: { "Content-Type": "application/json" }
 
     }
   });
@@ -98,7 +103,7 @@ app.get('/delete/:id', (async (req, res) => {
     payload: {
       url: `http://localhost:3000/api/${req.params.id}`,
       method: "delete",
-      headers: { "Content-Type": "application/json" }
+      //headers: { "Content-Type": "application/json" }
     }
   });
 

@@ -3,7 +3,9 @@ const controllers = require('../controllers');
 const router = Router();
 
 
-router.post('/', controllers.createItem);
+//router.post('/', controllers.createItem);
+
+router.post('/:title', controllers.createItem);
 
 // Retrieve all listitems
 router.get("/", controllers.findAll);
