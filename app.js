@@ -1,14 +1,15 @@
 const dotenv = require('dotenv');
 const express = require('express');
 const listRouter = require('./server/routes');
-const fetch = require('node-fetch');
+// mod.cjs
+const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const redis = require('redis');
 const path = require('path');
 
 dotenv.config();
 
 const app = express();
-
+const port = parseInt(process.env.PORT, 10) || 3000;
 app.set('view engine', 'ejs');
 //redis
 const client = redis.createClient(process.env.REDIS_PORT || 6379);
@@ -37,7 +38,7 @@ app.use('/api', listRouter);
 
 
 app.get('/', cached_data, ((req, res) => {
-  fetch("http://localhost:3000/api/", {
+  fetch(`http://localhost:${port}/api/`, {
     method: "get",
     headers: { "Content-Type": "application/json" }
   })
@@ -56,7 +57,7 @@ app.get('/', cached_data, ((req, res) => {
 }));
 
 app.post('/', ((req, res) => {
-  fetch("http://localhost:3000/api/", {
+  fetch(`http://localhost:${port}/api/`, {
     method: "post",
     body: JSON.stringify(req.body),
     headers: { "Content-Type": "application/json" }
@@ -77,7 +78,7 @@ app.post('/', ((req, res) => {
 
 app.post('/toggle', ((req, res) => {
 
-  fetch(`http://localhost:3000/api/${req.body.id}/${req.body.completed}`, {
+  fetch(`http://localhost:${port}/api/${req.body.id}/${req.body.completed}`, {
     method: "put",
     headers: { "Content-Type": "application/json" }
   })
@@ -94,7 +95,7 @@ app.post('/toggle', ((req, res) => {
 }));
 app.get('/delete/:id', ((req, res) => {
 
-  fetch(`http://localhost:3000/api/${req.params.id}`, {
+  fetch(`http://localhost:${port}/api/${req.params.id}`, {
     method: "delete",
     headers: { "Content-Type": "application/json" }
   })
@@ -114,7 +115,6 @@ app.get('/delete/:id', ((req, res) => {
 
 
 
-const port = parseInt(process.env.PORT, 10) || 3000;
 app.set('port', port);
 app.listen(port, () => {
   console.log(`Serve at http://localhost:${port}`);

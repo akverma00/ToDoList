@@ -5,21 +5,20 @@ require('./app.js');
 //Function to define applications
 const loadMainWindow = () => {
     const mainWindow = new BrowserWindow({
-        width: 1200,
-        height: 800,
+        width: 400,
+        height: 700,
         webPreferences: {
             nodeIntegration: true,
-        }
-    });
-    mainWindow.loadURL(`http://localhost:3000/`);
+        },
+        frame: false
 
-    //mainWindow.loadFile(path.join(__dirname, "index.html"));
+    });
+    mainWindow.loadURL(`http://localhost:${parseInt(process.env.PORT, 10) || 3000}/`);
 }
 
 //Waiting for the window to get ready
 app.whenReady().then(() => {
     loadMainWindow()
-
 
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
