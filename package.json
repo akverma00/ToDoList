@@ -2,23 +2,66 @@
   "name": "ToDoSequelize",
   "version": "0.0.0",
   "private": true,
+  "description": "My Advanced ToDoList",
+  "main": "main.js",
+  "author": "Arun Kumar Verma",
+  "license": "MIT",
   "scripts": {
     "start:dev": "nodemon app.js",
-    "start": "node app.js"
+    "start:e": "electron .",
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "dependencies": {
     "dotenv": "^10.0.0",
-    "ejs": "~2.6.1",
-    "express": "~4.16.1",
-    "node-fetch": "^2.6.1",
-    "pg": "^8.6.0",
-    "pg-hstore": "^2.3.3",
+    "ejs": "~3.1.6",
+    "electron-squirrel-startup": "^1.0.0",
+    "express": "~4.17.1",
+    "express-async-handler": "^1.1.4",
+    "node-fetch": "^3.0.0",
+    "path": "^0.12.7",
+    "pg": "^8.7.1",
+    "pg-hstore": "^2.3.4",
     "redis": "^3.1.2",
-    "sequelize": "^5.0.0"
+    "sequelize": "^6.7.0"
   },
   "devDependencies": {
-    "eslint": "^7.28.0",
-    "nodemon": "^2.0.7",
+    "@electron-forge/cli": "^6.0.0-beta.61",
+    "@electron-forge/maker-deb": "^6.0.0-beta.61",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.61",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.61",
+    "@electron-forge/maker-zip": "^6.0.0-beta.61",
+    "electron": "^15.1.2",
+    "eslint": "^8.0.0",
+    "nodemon": "^2.0.13",
     "sequelize-cli": "^6.2.0"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "ToDoSequelize"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
   }
 }
